@@ -12,6 +12,20 @@ export class CursosService {
       data: {
         nombre: createCursoDto.nombre,
         cupoMaximo: createCursoDto.cupoMaximo,
+        estudiantes: createCursoDto.estudiantesIds?.length
+          ? {
+            create: createCursoDto.estudiantesIds.map((estudianteId) => ({
+              estudiante: { connect: { id: estudianteId } },
+            })),
+          }
+        : undefined,
+      },
+      include: {
+        estudiantes: {
+          include: {
+            estudiante: true,
+          },
+        },
       },
     });
   }

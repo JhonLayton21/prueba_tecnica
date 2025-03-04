@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNotEmpty, Min } from "class-validator";
+import { IsString, IsInt, IsNotEmpty, Min, IsArray, IsOptional } from "class-validator";
 
 export class CreateCursoDto {
     @IsString()
@@ -8,4 +8,9 @@ export class CreateCursoDto {
     @IsInt()
     @Min(1)
     cupoMaximo: number;
+
+    @IsArray()
+    @IsInt({ each: true })
+    @IsOptional()
+    estudiantesIds?: number[];
 }
