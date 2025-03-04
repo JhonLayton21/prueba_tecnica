@@ -46,9 +46,24 @@ export class CursosService {
       data: {
         nombre: updateCursoDto.nombre,
         cupoMaximo: updateCursoDto.cupoMaximo,
+        estudiantes: updateCursoDto.estudiantesIds?.length
+          ? {
+              deleteMany: {}, // Elimina todas las relaciones previas
+              create: updateCursoDto.estudiantesIds.map((estudianteId) => ({
+                estudiante: { connect: { id: estudianteId } }, // Conectar nuevos estudiantes
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        estudiantes: {
+          include: {
+            estudiante: true,
+          },
+        },
       },
     });
-  }
+  }  
 
   async remove(id: number) {
     return this.prisma.curso.delete({
