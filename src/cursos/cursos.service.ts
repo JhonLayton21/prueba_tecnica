@@ -31,12 +31,27 @@ export class CursosService {
   }
 
   async findAll() {
-    return this.prisma.curso.findMany();
+    return this.prisma.curso.findMany({
+      include: {
+        estudiantes: {
+          include: {
+            estudiante: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
     return this.prisma.curso.findUnique({
       where: { id },
+      include: {
+        estudiantes: {
+          include: {
+            estudiante: true,
+          },
+        },
+      },
     });
   }
 
