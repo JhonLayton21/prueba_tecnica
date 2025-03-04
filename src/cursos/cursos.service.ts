@@ -31,7 +31,7 @@ export class CursosService {
   }
 
   async findAll() {
-    return this.prisma.curso.findMany({
+    const cursos = await this.prisma.curso.findMany({
       include: {
         estudiantes: {
           include: {
@@ -40,10 +40,16 @@ export class CursosService {
         },
       },
     });
+
+    // numero de estudiantes matriculados
+    return cursos.map((curso) => ({ 
+      ...curso,
+      numEstudiantes: curso.estudiantes.length,
+    }));
   }
 
   async findOne(id: number) {
-    return this.prisma.curso.findUnique({
+    const curso = await this.prisma.curso.findUnique({
       where: { id },
       include: {
         estudiantes: {
@@ -53,7 +59,14 @@ export class CursosService {
         },
       },
     });
-  }
+  
+    if (!curso) return null;
+  
+    return {
+      ...curso,
+      numEstudiantes: curso.estudiantes.length,
+    };
+  }  
 
   async update(id: number, updateCursoDto: UpdateCursoDto) {
     return this.prisma.curso.update({
