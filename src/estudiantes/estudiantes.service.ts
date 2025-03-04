@@ -16,12 +16,27 @@ export class EstudiantesService {
   }
 
   async findAll() {
-    return this.prisma.estudiante.findMany();
+    return this.prisma.estudiante.findMany({
+      include: {
+        cursos: {
+          include: {
+            curso: true,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number) {
     return this.prisma.estudiante.findUnique({
       where: { id },
+      include: {
+        cursos: {
+          include: {
+            curso: true,
+          },
+        },
+      },
     });
   }
 
