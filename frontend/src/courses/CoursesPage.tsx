@@ -1,10 +1,12 @@
 import React from "react";
 import { useEffect, useState} from "react";
 import getCourses from "./courses";
+import { useNavigate } from "react-router-dom";
 import { Container, Typography, List, ListItem, ListItemText } from "@mui/material";
 
 const Courses = () => {
-  const [courses, setCourses] = useState<{ id: number; nombre: string }[]>([]);
+    const [courses, setCourses] = useState<{ id: number; nombre: string; cupoMaximo: number; estudiantes: any[] }[]>([]);
+    const navigate = useNavigate();
 
   useEffect(() => {
     getCourses()
@@ -18,8 +20,15 @@ const Courses = () => {
       <List>
   {courses?.length > 0 ? (
     courses.map((courses) => (
-      <ListItem key={courses.id}>
-        <ListItemText primary={courses.nombre} />
+      <ListItem 
+        key={courses.id} 
+        component="button" 
+        onClick={() => navigate(`/cursos/${courses.id}`)}
+        >
+        <ListItemText 
+            primary={courses.nombre}
+            secondary={`Cupo Máximo: ${courses.cupoMaximo} - Estudiantes: ${courses.estudiantes.length}`} 
+        />
       </ListItem>
     ))
   ) : (
